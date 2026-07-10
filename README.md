@@ -225,6 +225,8 @@ Gemini単体には表現の保存・振り返り機能がなく、Excel等へエ
 **【対応方針】**
 現在、注目されているReactについては、**本リリース（卒業後・就活期）に組み込む方向で検討**します。MVP期はRails + Hotwireによる検証に集中し、その後フロントエンド単体のキャッチアップおよび技術的な検証をしっかりと行った上で、安全にフロントエンドのコンポーネント化（React化）へとシフトする形が理想的であると判断しました。
 
+---
+
 ### 画面遷移図
 Figma：<https://www.figma.com/design/4TZx4K0V8tFzPrwdDqJfku/RUNTEQ_Final-project?node-id=0-1&t=STtPwbPhzQ666ugM-1>
 
