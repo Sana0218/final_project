@@ -228,7 +228,7 @@ Gemini単体には表現の保存・振り返り機能がなく、Excel等へエ
 ---
 
 ### 画面遷移図
-Figma：<https://www.figma.com/design/4TZx4K0V8tFzPrwdDqJfku/RUNTEQ_Final-project?node-id=0-1&p=f&t=fzaluJMndCHTQne1-0>
+Figma：<https://www.figma.com/design/4TZx4K0V8tFzPrwdDqJfku/RUNTEQ_Final-project?node-id=0-1&p=f&t=qttaIedfbatKUdtg-0>
 
 ### 本サービスの概要（700文字以内）
 ※ あなたが作成するアプリの目的・概要・想定ユーザー・主な機能などを700文字以内でまとめてください。
