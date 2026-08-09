@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <!-- 共通ヘッダー -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 w-full z-10 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide" %>
+        
+        <nav class="flex items-center space-x-4">
+          <%= link_to "ログイン", "#", class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "新規登録", "#", class: "text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
+        </nav>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ領域（ヘッダーの高さを考慮して上部余白を設定） -->
+    <main class="flex-grow max-w-7xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8 py-8">
+      <%= yield %>
+    </main>
+
+    <!-- 共通フッター -->
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+        &copy; 2026 App. All rights reserved.
+      </div>
+    </footer>
+  </body>
+</html>
