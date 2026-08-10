@@ -1,24 +1,27 @@
-FROM ruby:3.2.2
+FROM ruby:3.3.12
 
-# 開発に必要なパッケージのインストール
+# 開発・アセットビルドに必要なパッケージのインストール（npm, yarnを追加）
 RUN apt-get update -qq && apt-get install -y \
     build-essential \
     libpq-dev \
     nodejs \
+    npm \
     postgresql-client \
-    git
+    git && \
+    npm install -g yarn
 
 WORKDIR /app
 
-# GemfileとGemfile.lockをコピーしてbundle install
+# 1. まず Gemfile をコピーして Gem をインストール
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
-# Precompiling assets for production without requiring secret_key_base
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 RUN bundle install
 
-# アプリケーションコード全体をコピー
+# 2. アプリケーションコード全体をコピー
 COPY . /app
+
+# 3. コードがコピーされた後にアセットをプリコンパイル
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 # エントリーポイントの設定
 COPY entrypoint.sh /usr/bin/
