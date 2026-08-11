@@ -18,3 +18,5 @@ development:
 test:
   <<: *default
   database: final_project_test
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  

@@ -277,3 +277,6 @@ Figma：<https://www.figma.com/design/4TZx4K0V8tFzPrwdDqJfku/RUNTEQ_Final-projec
 ### メールアドレス・パスワード変更確認項目
 - [x] メールアドレス
 - [x] パスワード
+
+
+#CI test
