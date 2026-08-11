@@ -45,6 +45,12 @@ jobs:
         run: |
           bundle exec rubocop
 
+      - name: Precompile Assets
+        env:
+          RAILS_ENV: test
+        run: |
+          bundle exec rails assets:precompile
+
       - name: Run RSpec
         env:
           RAILS_ENV: test
