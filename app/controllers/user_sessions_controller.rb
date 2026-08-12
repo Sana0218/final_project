@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserSessionsController < ApplicationController
   skip_before_action :require_login, only: %i[new create]
   def new; end
@@ -8,7 +10,7 @@ class UserSessionsController < ApplicationController
       redirect_back_or_to root_path, notice: 'ログインしました'
     else
       flash.now[:alert] = 'ログインに失敗しました'
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

@@ -6,15 +6,15 @@ Rails.application.routes.draw do
   get 'user_sessions/destroy'
   get 'users/new'
   get 'users/create'
-  
+
   get 'static_pages/top'
   root 'static_pages#top'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  
-  #User registration
+
+  # User registration
   resources :users, only: %i[new create]
 
-  #Login / Logout
+  # Login / Logout
   get 'login' => 'user_sessions#new', as: :login
   post 'login' => 'user_sessions#create'
   delete 'logout' => 'user_sessions#destroy', as: :logout

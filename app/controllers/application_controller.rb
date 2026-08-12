@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  before_action :require_login
 
-    before_action :require_login
+  private
 
-    private
-
-    def not_authenticated
-        redirect_to login_path, alert: 'ログインが必要です'
-    end
+  def not_authenticated
+    redirect_to login_path, alert: 'ログインが必要です'
+  end
 end
