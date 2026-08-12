@@ -63,3 +63,5 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'simplecov', require: false
 end
+
+gem 'sorcery'
