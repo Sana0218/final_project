@@ -3,24 +3,31 @@
 require 'rails_helper'
 
 RSpec.describe 'Profiles', type: :request do
-  describe 'GET /show' do
+  let(:user) do
+    User.create!(name: 'Test', email: 'test@example.com', password: 'password', password_confirmation: 'password')
+  end
+
+  before { post login_path, params: { email: user.email, password: 'password' } }
+
+  describe 'GET /profile' do
     it 'returns http success' do
-      get '/profiles/show'
+      get profile_path
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /edit' do
+  describe 'GET /profile/edit' do
     it 'returns http success' do
-      get '/profiles/edit'
+      get edit_profile_path
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /update' do
-    it 'returns http success' do
-      get '/profiles/update'
-      expect(response).to have_http_status(:success)
+  describe 'PATCH /profile' do
+    it 'updates the profile and redirects' do
+      patch profile_path, params: { user: { name: 'Updated Name', email: user.email } }
+      expect(response).to redirect_to(profile_path)
+      expect(user.reload.name).to eq('Updated Name')
     end
   end
 end
