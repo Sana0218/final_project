@@ -1,4 +1,17 @@
-<div>
-  <h1 class="font-bold text-4xl">Profiles#show</h1>
-  <p>Find me in app/views/profiles/show.html.erb</p>
+<div class="max-w-md mx-auto bg-white p-4 rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold">マイページ</h1>
+
+  <div class="mt-4">
+    <label class="block text-sm font-medium text-gray-700">名前</label>
+    <p class="mt-1 text-gray-900"><%= @user.name %></p>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700">メールアドレス</label>
+    <p class="mt-1 text-gray-900"><%= @user.email %></p>
+  </div>
+
+  <div class="mt-4">
+    <%= link_to '編集する', edit_profile_path, class: 'btn btn-primary' %>
+  </div>
 </div>
