@@ -1,0 +1,24 @@
+<div class="max-w-3xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">日記一覧</h1>
+    <%= link_to '新しい日記を書く', new_diary_path, class: 'bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm' %>
+  </div>
+
+  <% if @diaries.any? %>
+    <div class="space-y-4">
+      <% @diaries.each do |diary| %>
+        <article class="bg-white p-6 rounded-lg shadow-md">
+          <time class="text-sm text-gray-500" datetime="<%= diary.created_at.iso8601 %>">
+            <%= l(diary.created_at, format: :long) %>
+          </time>
+          <p class="mt-3 text-gray-800 whitespace-pre-wrap"><%= diary.content %></p>
+        </article>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white p-8 rounded-lg shadow-md text-center text-gray-500">
+      <p>まだ日記がありません。</p>
+      <p class="mt-2">最初の日記を書いてみましょう。</p>
+    </div>
+  <% end %>
+</div>
