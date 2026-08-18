@@ -1,8 +1,8 @@
-<div class="max-w-md mx-auto mt-10" p-6 bg-white rounded-lg shadow-md>
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
   <h1 class="text-2xl font-bold text-center mb-6">ユーザー登録</h1>
   
   <%= form_with model: @user, local: true do |f| %>
-  <% if @user.errors.any? %><
+  <% if @user.errors.any? %>
     <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
       <ul class="list-disc pl-5">
         <% @user.errors.full_messages.each do |message| %>

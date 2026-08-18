@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProfilesController < ApplicationController
   before_action :set_user, only: %i[show edit update]
   def show;  end
@@ -6,7 +8,7 @@ class ProfilesController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to @user, notice: 'プロフィールを更新しました'
+      redirect_to profile_path, notice: 'プロフィールを更新しました'
     else
       flash.now[:alert] = 'プロフィールを更新できませんでした'
       render :edit, status: :unprocessable_entity
@@ -20,6 +22,9 @@ class ProfilesController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    permitted = params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    return permitted.except(:password, :password_confirmation) if permitted[:password].blank?
+
+    permitted
   end
 end
