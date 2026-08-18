@@ -65,3 +65,5 @@ group :development, :test do
 end
 
 gem 'sorcery'
+gem 'ruby-openai'
+
