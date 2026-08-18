@@ -3,11 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Profiles', type: :request do
-  let(:user) do
-    User.create!(name: 'Test', email: 'test@example.com', password: 'password', password_confirmation: 'password')
-  end
-
-  before { post login_path, params: { email: user.email, password: 'password' } }
+  include_context 'with signed in user'
 
   describe 'GET /profile' do
     it 'returns http success' do

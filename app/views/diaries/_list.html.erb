@@ -1,0 +1,10 @@
+<% if diaries.any? %>
+  <div class="space-y-4">
+    <%= render partial: 'diaries/diary_card', collection: diaries, as: :diary %>
+  </div>
+<% else %>
+  <div class="bg-white p-8 rounded-lg shadow-md text-center text-gray-500">
+    <p>まだ日記がありません。</p>
+    <p class="mt-2">最初の日記を書いてみましょう。</p>
+  </div>
+<% end %>

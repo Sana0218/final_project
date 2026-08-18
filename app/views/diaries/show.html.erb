@@ -1,0 +1,10 @@
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+  <div class="flex items-start justify-between gap-4 mb-4">
+    <time class="text-sm text-gray-500" datetime="<%= @diary.created_at.iso8601 %>">
+      <%= l(@diary.created_at, format: :long) %>
+    </time>
+    <%= link_to '一覧に戻る', diaries_path, class: 'text-sm text-indigo-600 hover:text-indigo-700 font-medium' %>
+  </div>
+
+  <p class="text-gray-800 whitespace-pre-wrap"><%= @diary.content %></p>
+</div>
