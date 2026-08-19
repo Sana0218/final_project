@@ -6,12 +6,16 @@ RSpec.describe 'Diaries::Create', type: :request do
   include_context 'with signed in user'
 
   describe 'POST /diaries' do
-    it 'creates a diary and redirects to index' do
-      expect do
-        post diaries_path, params: { diary: { content: 'Today was a good day.' } }
-      end.to change(Diary, :count).by(1)
+    it 'creates a diary and redirects to the detail page' do
+      service = instance_double(GeminiCorrectionService, call: { corrected_text: 'Fixed.', feedback: 'OK' })
+      allow(GeminiCorrectionService).to receive(:new).and_return(service)
 
-      expect(response).to redirect_to(diaries_path)
+      expect { post diaries_path, params: { diary: { content: 'Today was a good day.' } } }
+        .to change(Diary, :count).by(1)
+
+      diary = Diary.last
+      expect(response).to redirect_to(diary_path(diary))
+      expect(diary).to have_attributes(corrected_text: 'Fixed.', feedback: 'OK')
       follow_redirect!
       expect(response.body).to include('Today was a good day.')
     end

@@ -18,6 +18,7 @@ services:
     environment:
       DATABASE_HOST: db
       DATABASE_PASSWORD: password
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     depends_on:
       - db
     stdin_open: true
