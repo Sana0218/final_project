@@ -64,6 +64,5 @@ group :development, :test do
   gem 'simplecov', require: false
 end
 
-gem 'sorcery'
 gem 'ruby-openai'
-
+gem 'sorcery'

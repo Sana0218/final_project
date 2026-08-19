@@ -1,33 +1,52 @@
+# frozen_string_literal: true
+
 class GeminiCorrectionService
-def initialize(content)
-  @content = content
-end
+  URI_BASE = 'https://generativelanguage.googleapis.com/v1beta/openai/'
+  MODEL = 'gemini-3.6-flash'
+  SYSTEM_PROMPT = <<~PROMPT.chomp
+    You are a helpful English tutor. The user will provide a diary entry
+    containing a mix of Japanese and English.
+    Task:
+    1. Translate Japanese parts into natural English and correct grammatical
+    errors in the English parts.
+    2. Provide feedback in Japanese.
+    Return JSON with keys corrected_text (English) and feedback (Japanese).
+  PROMPT
 
-def call
-  client = OpenAI::Client.new(
-    access_token: ENV['GEMINI_API_KEY'],
-    uri_base: 'https://generativelanguage.googleapis.com/v1beta/openai/'
-  )
-  response = client.chat(parameters: {
-    response_format: { type: "json_object" },
-    model: "gemini-3.6-flash",
-    messages: [
-      { role: "system", content: "You are a helpful English tutor. The user will provide a diary entry containing a mix of Japanese and English.
-                                  Task:
-                                  1. Translate Japanese parts into natural English and correct grammatical errors in the English parts.
-                                  2. Provide feedback in Japanese.
+  def initialize(content)
+    @content = content
+  end
 
-                                  Return the response in JSON format with the following keys: corrected_text and feedback. corrected_text is the corrected text in English, feedback is the feedback in Japanese." },
-      { role: "user", content: @content }
-    ]
-  })
+  def call
+    text = response.dig('choices', 0, 'message', 'content')
+    parsed = JSON.parse(text)
+    {
+      corrected_text: parsed['corrected_text'],
+      feedback: parsed['feedback']
+    }
+  end
 
-  text = response.dig('choices', 0, 'message', 'content')
-  parsed_response = JSON.parse(text)
-  {
-    corrected_text: parsed_response["corrected_text"],
-    feedback: parsed_response["feedback"]
-  }
+  private
 
-end 
+  def response
+    client.chat(parameters: chat_params)
+  end
+
+  def client
+    OpenAI::Client.new(
+      access_token: ENV.fetch('GEMINI_API_KEY', nil),
+      uri_base: URI_BASE
+    )
+  end
+
+  def chat_params
+    {
+      response_format: { type: 'json_object' },
+      model: MODEL,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: @content }
+      ]
+    }
+  end
 end
