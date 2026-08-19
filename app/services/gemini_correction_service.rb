@@ -13,20 +13,27 @@ class GeminiCorrectionService
     Return JSON with keys corrected_text (English) and feedback (Japanese).
   PROMPT
 
-  def initialize(content)
-    @content = content
+  def initialize(diary)
+    @diary = diary
   end
 
   def call
-    text = response.dig('choices', 0, 'message', 'content')
-    parsed = JSON.parse(text)
-    {
+    parsed = parse_correction
+    @diary.update(
       corrected_text: parsed['corrected_text'],
       feedback: parsed['feedback']
-    }
+    )
+  rescue StandardError => e
+    Rails.logger.error("[GeminiCorrectionService] #{e.class}: #{e.message}")
+    false
   end
 
   private
+
+  def parse_correction
+    text = response.dig('choices', 0, 'message', 'content')
+    JSON.parse(text)
+  end
 
   def response
     client.chat(parameters: chat_params)
@@ -45,7 +52,7 @@ class GeminiCorrectionService
       model: MODEL,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: @content }
+        { role: 'user', content: @diary.content }
       ]
     }
   end

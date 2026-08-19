@@ -16,7 +16,7 @@ class DiariesController < ApplicationController
   def create
     @diary = current_user.diaries.build(diary_params)
     if @diary.save
-      apply_ai_correction
+      GeminiCorrectionService.new(@diary).call
       redirect_to diary_path(@diary), notice: '日記を投稿しました'
     else
       flash.now[:alert] = '日記の投稿に失敗しました'
@@ -25,14 +25,6 @@ class DiariesController < ApplicationController
   end
 
   private
-
-  def apply_ai_correction
-    result = GeminiCorrectionService.new(@diary.content).call
-    @diary.update(
-      corrected_text: result[:corrected_text],
-      feedback: result[:feedback]
-    )
-  end
 
   def set_diary
     @diary = current_user.diaries.find(params[:id])
