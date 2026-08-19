@@ -16,7 +16,12 @@ class DiariesController < ApplicationController
   def create
     @diary = current_user.diaries.build(diary_params)
     if @diary.save
-      redirect_to diaries_path, notice: '日記を投稿しました'
+      result = GeminiCorrectionService.new(@diary.content).call
+      @diary.update(
+        corrected_text: result[:corrected_text],
+        feedback: result[:feedback]
+      )
+      redirect_to diary_path(@diary), notice: '日記を投稿しました'
     else
       flash.now[:alert] = '日記の投稿に失敗しました'
       render :new, status: :unprocessable_content
