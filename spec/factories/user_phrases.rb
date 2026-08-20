@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :user_phrase do
-    user { nil }
-    phrase { nil }
+    association :user
+    association :phrase
   end
 end
