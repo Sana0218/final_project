@@ -10,7 +10,8 @@ class GeminiCorrectionService
     1. Translate Japanese parts into natural English and correct grammatical
     errors in the English parts.
     2. Provide feedback in Japanese.
-    Return JSON with keys corrected_text (English) and feedback (Japanese).
+    Return JSON with keys corrected_text (English), feedback (Japanese),
+    and suggested_phrases (array of exactly 3 useful English phrases to learn).
   PROMPT
 
   def initialize(diary)
@@ -21,7 +22,8 @@ class GeminiCorrectionService
     parsed = parse_correction
     @diary.update(
       corrected_text: parsed['corrected_text'],
-      feedback: parsed['feedback']
+      feedback: parsed['feedback'],
+      suggested_phrases: parsed['suggested_phrases']
     )
   rescue StandardError => e
     Rails.logger.error("[GeminiCorrectionService] #{e.class}: #{e.message}")

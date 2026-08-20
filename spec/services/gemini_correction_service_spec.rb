@@ -10,18 +10,24 @@ RSpec.describe GeminiCorrectionService do
   let(:client) { instance_double(OpenAI::Client) }
 
   before do
-    payload = { 'corrected_text' => 'Today I went to the park.', 'feedback' => 'go を went に直しました。' }
+    payload = {
+      'corrected_text' => 'Today I went to the park.',
+      'feedback' => 'go を went に直しました。',
+      'suggested_phrases' => ['go to the park', 'It was fun.', 'have a great day']
+    }
     allow(OpenAI::Client).to receive(:new).and_return(client)
     allow(client).to receive(:chat)
       .and_return({ 'choices' => [{ 'message' => { 'content' => payload.to_json } }] })
   end
 
   describe '#call' do
-    it 'saves corrected_text and feedback to the diary' do
+    it 'saves corrected_text, feedback, and suggested_phrases to the diary' do
       described_class.new(diary).call
-      diary.reload
-      expect(diary.corrected_text).to eq('Today I went to the park.')
-      expect(diary.feedback).to eq('go を went に直しました。')
+      expect(diary.reload).to have_attributes(
+        corrected_text: 'Today I went to the park.',
+        feedback: 'go を went に直しました。',
+        suggested_phrases: ['go to the park', 'It was fun.', 'have a great day']
+      )
     end
 
     it 'does not raise when the API request fails' do

@@ -4,6 +4,8 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   has_many :diaries, dependent: :destroy
+  has_many :user_phrases, dependent: :destroy
+  has_many :phrases, through: :user_phrases
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

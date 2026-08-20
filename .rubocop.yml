@@ -14,5 +14,9 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
 Rails/I18nLocaleTexts:
   Enabled: false

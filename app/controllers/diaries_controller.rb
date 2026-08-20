@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
 class DiariesController < ApplicationController
-  before_action :set_diary, only: [:show]
+  before_action :set_diary, only: %i[show save_phrases]
 
   def index
     @diaries = current_user.diaries.order(created_at: :desc)
   end
 
   def show; end
+
+  def save_phrases
+    saved = PhraseSaveService.new(user: current_user, phrase_contents: params[:phrase_contents]).call
+    if saved.any?
+      redirect_to diary_path(@diary), notice: "#{saved.size}件のフレーズを保存しました"
+    else
+      redirect_to diary_path(@diary), alert: '保存するフレーズを選択してください'
+    end
+  end
 
   def new
     @diary = current_user.diaries.build

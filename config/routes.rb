@@ -15,5 +15,9 @@ Rails.application.routes.draw do
   resource :profile, only: %i[show edit update]
 
   # diaries
-  resources :diaries, only: %i[index show new create]
+  resources :diaries, only: %i[index show new create] do
+    member do
+      post :save_phrases
+    end
+  end
 end
