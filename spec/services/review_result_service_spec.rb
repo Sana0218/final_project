@@ -17,8 +17,6 @@ RSpec.describe ReviewResultService do
 
   before { travel_to Date.new(2026, 8, 20) }
 
-  after { travel_back }
-
   it 'advances stage and sets next review date when correct' do
     described_class.new(user_phrase: user_phrase, correct: true).call
 

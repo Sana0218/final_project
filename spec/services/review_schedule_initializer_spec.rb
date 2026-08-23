@@ -10,8 +10,6 @@ RSpec.describe ReviewScheduleInitializer do
 
   before { travel_to Date.new(2026, 8, 20) }
 
-  after { travel_back }
-
   it 'sets initial review schedule for a new user_phrase' do
     user_phrase = user.user_phrases.build(phrase: phrase)
 
