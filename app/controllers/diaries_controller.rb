@@ -4,7 +4,7 @@ class DiariesController < ApplicationController
   before_action :set_diary, only: %i[show save_phrases]
 
   def index
-    @diaries = current_user.diaries.order(created_at: :desc)
+    @diaries = current_user.diaries.ordered
   end
 
   def show; end
