@@ -14,6 +14,13 @@ Rails.application.routes.draw do
   # profile / account editing
   resource :profile, only: %i[show edit update]
 
+  # reviews
+  resources :reviews, only: [:index] do
+    member do
+      post :complete
+    end
+  end
+
   # diaries
   resources :diaries, only: %i[index show new create] do
     member do

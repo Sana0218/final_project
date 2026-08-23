@@ -25,6 +25,7 @@ class UserPhrase < ApplicationRecord
   validates :next_review_date, presence: true
 
   scope :due_for_review, ->(date = Date.current) { where(next_review_date: ..date) }
+  scope :pending_review, ->(date = Date.current) { due_for_review(date).where(review_completed: false) }
 
   def due_for_review?(date = Date.current)
     next_review_date <= date
