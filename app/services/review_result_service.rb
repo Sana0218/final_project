@@ -11,7 +11,8 @@ class ReviewResultService
 
     @user_phrase.update!(
       review_stage: new_stage,
-      next_review_date: Date.current + UserPhrase::REVIEW_STAGES[new_stage]
+      next_review_date: Date.current + UserPhrase::REVIEW_STAGES[new_stage],
+      review_completed: true
     )
   end
 

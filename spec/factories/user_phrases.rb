@@ -6,5 +6,6 @@ FactoryBot.define do
     association :phrase
     review_stage { 0 }
     next_review_date { Date.current + UserPhrase::REVIEW_STAGES[0] }
+    review_completed { false }
   end
 end

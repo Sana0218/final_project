@@ -22,7 +22,8 @@ RSpec.describe ReviewResultService do
 
     expect(user_phrase.reload).to have_attributes(
       review_stage: 2,
-      next_review_date: Date.new(2026, 8, 27)
+      next_review_date: Date.new(2026, 8, 27),
+      review_completed: true
     )
   end
 
@@ -31,7 +32,8 @@ RSpec.describe ReviewResultService do
 
     expect(user_phrase.reload).to have_attributes(
       review_stage: 0,
-      next_review_date: Date.new(2026, 8, 21)
+      next_review_date: Date.new(2026, 8, 21),
+      review_completed: true
     )
   end
 
@@ -42,7 +44,8 @@ RSpec.describe ReviewResultService do
 
     expect(user_phrase.reload).to have_attributes(
       review_stage: UserPhrase::MAX_REVIEW_STAGE,
-      next_review_date: Date.new(2026, 9, 19)
+      next_review_date: Date.new(2026, 9, 19),
+      review_completed: true
     )
   end
 end
