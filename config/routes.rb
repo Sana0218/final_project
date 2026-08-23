@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   # saved phrases
   resources :phrases, only: [:index]
 
+  # Calendar for scheduled reviews
+  resource :review_calendar, only: [:show]
+
   # diaries
   resources :diaries, only: %i[index show new create] do
     member do
