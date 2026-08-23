@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # saved phrases
+  resources :phrases, only: [:index]
+
   # diaries
   resources :diaries, only: %i[index show new create] do
     member do
