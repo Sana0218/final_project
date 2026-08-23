@@ -22,7 +22,8 @@ class PhraseSaveService
 
   def save_phrase(content)
     phrase = Phrase.find_or_create_by!(content: content)
-    @user.user_phrases.find_or_create_by!(phrase: phrase)
+    user_phrase = @user.user_phrases.find_or_initialize_by(phrase: phrase)
+    ReviewScheduleInitializer.new(user_phrase).call
     phrase
   end
 end
