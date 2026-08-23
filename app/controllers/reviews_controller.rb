@@ -5,7 +5,7 @@ class ReviewsController < ApplicationController
 
   def index
     reset_stale_review_flags
-    @user_phrases = current_user.user_phrases.pending_review.includes(:phrase)
+    @user_phrases = current_user.user_phrases.pending_review.with_phrase
   end
 
   def complete
