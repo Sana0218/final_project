@@ -1,0 +1,66 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-start justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">復習スケジュール</h1>
+      <p class="text-sm text-gray-500 mt-1">次回復習予定日ごとにフレーズを確認できます。</p>
+    </div>
+    <%= link_to '本日の復習へ', reviews_path, class: 'text-sm text-indigo-600 hover:text-indigo-700 font-medium' %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-bold text-gray-900">
+        <%= @calendar.month.year %>年<%= @calendar.month.month %>月
+      </h2>
+      <div class="flex gap-2">
+        <%= link_to '前月',
+            review_calendar_path(month: @calendar.month.prev_month.strftime('%Y-%m')),
+            class: 'text-sm px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition' %>
+        <%= link_to '今月',
+            review_calendar_path,
+            class: 'text-sm px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition' %>
+        <%= link_to '翌月',
+            review_calendar_path(month: @calendar.month.next_month.strftime('%Y-%m')),
+            class: 'text-sm px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition' %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-7 gap-2 text-center text-xs font-medium text-gray-500 mb-2">
+      <% %w[日 月 火 水 木 金 土].each do |weekday| %>
+        <div><%= weekday %></div>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-7 gap-2">
+      <% @calendar.calendar_days.each do |date| %>
+        <% phrases = @calendar.phrases_for(date) %>
+        <% in_month = @calendar.current_month?(date) %>
+        <% today = date == Date.current %>
+        <div class="min-h-24 rounded-lg border p-2 text-left <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100' %> <%= today ? 'ring-2 ring-indigo-500' : '' %>">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold <%= in_month ? 'text-gray-900' : 'text-gray-400' %>">
+              <%= date.day %>
+            </span>
+            <% if phrases.any? && in_month %>
+              <span class="text-[10px] font-medium text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded-full">
+                <%= phrases.size %>件
+              </span>
+            <% end %>
+          </div>
+          <% if in_month %>
+            <ul class="space-y-1">
+              <% phrases.first(2).each do |user_phrase| %>
+                <li class="text-[11px] text-gray-600 truncate" title="<%= user_phrase.phrase.content %>">
+                  <%= truncate(user_phrase.phrase.content, length: 18) %>
+                </li>
+              <% end %>
+              <% if phrases.size > 2 %>
+                <li class="text-[10px] text-gray-400">他 <%= phrases.size - 2 %> 件</li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,7 @@
         <nav class="flex items-center space-x-4">
           <% if logged_in? %>
             <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+            <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
             <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
             <%= link_to "日記", diaries_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
             <%= link_to "マイページ", profile_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
