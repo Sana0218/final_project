@@ -50,5 +50,14 @@ RSpec.describe 'ReviewCalendars', type: :request do
 
       expect(response.body).not_to include('secret phrase')
     end
+
+    it 'falls back to the current month when month param is invalid' do
+      travel_to Date.new(2026, 8, 10) do
+        get review_calendar_path(month: 'invalid-month')
+
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include('2026年8月')
+      end
+    end
   end
 end

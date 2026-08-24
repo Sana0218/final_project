@@ -48,4 +48,28 @@ RSpec.describe ReviewResultService do
       review_completed: true
     )
   end
+
+  it 'does not drop below stage 0 when incorrect' do
+    user_phrase.update!(review_stage: 0)
+
+    described_class.new(user_phrase: user_phrase, correct: false).call
+
+    expect(user_phrase.reload).to have_attributes(
+      review_stage: 0,
+      next_review_date: Date.new(2026, 8, 21),
+      review_completed: true
+    )
+  end
+
+  it 'advances from stage 0 when correct' do
+    user_phrase.update!(review_stage: 0)
+
+    described_class.new(user_phrase: user_phrase, correct: true).call
+
+    expect(user_phrase.reload).to have_attributes(
+      review_stage: 1,
+      next_review_date: Date.new(2026, 8, 23),
+      review_completed: true
+    )
+  end
 end
