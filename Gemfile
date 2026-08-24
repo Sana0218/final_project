@@ -67,3 +67,5 @@ end
 
 gem 'ruby-openai'
 gem 'sorcery'
+
+gem 'line-bot-api', '~> 2.10'
