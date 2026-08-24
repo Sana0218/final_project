@@ -44,4 +44,14 @@ RSpec.describe LineReminderService do
     expect(result).to be(false)
     expect(LineBotClient).not_to have_received(:push_text)
   end
+
+  it 'returns false when LINE push fails' do
+    http_error = Class.new(StandardError)
+    stub_const('Line::Bot::HTTPError', http_error)
+    allow(LineBotClient).to receive(:push_text).and_raise(http_error.new('push failed'))
+
+    result = described_class.new(user).call
+
+    expect(result).to be(false)
+  end
 end

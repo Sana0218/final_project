@@ -45,4 +45,29 @@ RSpec.describe 'LineWebhooks', type: :request do
 
     expect(response).to have_http_status(:service_unavailable)
   end
+
+  it 'returns bad request when signature validation fails' do
+    allow(LineBotClient).to receive(:validate_signature).and_return(false)
+
+    post '/line/webhook', params: body, headers: { 'CONTENT_TYPE' => 'application/json' }
+
+    expect(response).to have_http_status(:bad_request)
+  end
+
+  it 'replies with a welcome message on follow events' do
+    follow_body = {
+      events: [
+        {
+          type: 'follow',
+          replyToken: 'follow-reply-token',
+          source: { userId: 'U456' }
+        }
+      ]
+    }.to_json
+
+    post '/line/webhook', params: follow_body, headers: { 'CONTENT_TYPE' => 'application/json' }
+
+    expect(response).to have_http_status(:ok)
+    expect(LineBotClient).to have_received(:reply_text).with('follow-reply-token', a_string_including('ようこそ'))
+  end
 end
