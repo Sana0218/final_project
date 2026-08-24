@@ -28,4 +28,16 @@ RSpec.describe Diary, type: :model do
       expect(diary).not_to be_valid
     end
   end
+
+  describe '#correction_completed?' do
+    it 'returns true when corrected_text is present' do
+      diary = Diary.new(content: 'Hello', corrected_text: 'Hello world.')
+      expect(diary.correction_completed?).to be(true)
+    end
+
+    it 'returns false when corrected_text is blank' do
+      diary = Diary.new(content: 'Hello', corrected_text: nil)
+      expect(diary.correction_completed?).to be(false)
+    end
+  end
 end

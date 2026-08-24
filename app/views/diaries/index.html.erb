@@ -1,7 +1,7 @@
 <div class="max-w-3xl mx-auto">
-  <div class="flex items-center justify-between mb-6">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
     <h1 class="text-2xl font-bold">日記一覧</h1>
-    <%= link_to '新しい日記を書く', new_diary_path, class: 'bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm' %>
+    <%= link_to '新しい日記を書く', new_diary_path, class: 'w-full sm:w-auto text-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm' %>
   </div>
 
   <%= render 'diaries/list', diaries: @diaries %>

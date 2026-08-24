@@ -21,6 +21,18 @@ RSpec.describe 'Diaries::Create', type: :request do
       expect(response.body).to include('Today was a good day.')
     end
 
+    it 'redirects with an alert when AI correction fails' do
+      service = instance_double(GeminiCorrectionService, call: false)
+      allow(GeminiCorrectionService).to receive(:new).and_return(service)
+
+      post diaries_path, params: { diary: { content: 'Today was a good day.' } }
+
+      diary = Diary.last
+      expect(response).to redirect_to(diary_path(diary))
+      follow_redirect!
+      expect(response.body).to include('AI添削に失敗しました')
+    end
+
     it 'rejects invalid params' do
       expect do
         post diaries_path, params: { diary: { content: '' } }
