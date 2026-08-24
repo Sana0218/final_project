@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   delete 'logout' => 'user_sessions#destroy', as: :logout
 
   # profile / account editing
-  resource :profile, only: %i[show edit update]
+  resource :profile, only: %i[show edit update] do
+    post :line_link_token, on: :member
+  end
+
+  # LINE Messaging API webhook
+  post 'line/webhook', to: 'line_webhooks#create'
 
   # reviews
   resources :reviews, only: [:index] do

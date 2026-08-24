@@ -17,6 +17,10 @@ module App
     config.hosts << 'final-project-d423.onrender.com'
     config.hosts << 'www.example.com'
 
+    config.after_initialize do
+      Rails.application.routes.default_url_options[:host] = ENV.fetch('APP_HOST', 'localhost:3000')
+    end
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

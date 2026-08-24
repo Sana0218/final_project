@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ProfilesController < ApplicationController
-  before_action :set_user, only: %i[show edit update]
+  before_action :set_user, only: %i[show edit update line_link_token]
 
   def show; end
 
@@ -16,6 +16,11 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def line_link_token
+    @user.generate_line_link_token!
+    redirect_to profile_path, notice: 'LINE連携コードを発行しました'
+  end
+
   private
 
   def set_user
@@ -23,7 +28,10 @@ class ProfilesController < ApplicationController
   end
 
   def user_params
-    permitted = params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    permitted = params.require(:user).permit(
+      :name, :email, :password, :password_confirmation,
+      :reminder_enabled, :reminder_hour, :reminder_minute, :time_zone
+    )
     return permitted.except(:password, :password_confirmation) if permitted[:password].blank?
 
     permitted
