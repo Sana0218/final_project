@@ -6,4 +6,8 @@ class Diary < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
 
   validates :content, presence: true, length: { maximum: 10_000 }
+
+  def correction_completed?
+    corrected_text.present?
+  end
 end

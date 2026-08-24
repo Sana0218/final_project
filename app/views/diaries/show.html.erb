@@ -1,22 +1,28 @@
-<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-  <div class="flex items-start justify-between gap-4 mb-4">
+<div class="max-w-2xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
+  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 mb-4">
     <time class="text-sm text-gray-500" datetime="<%= @diary.created_at.iso8601 %>">
       <%= l(@diary.created_at, format: :long) %>
     </time>
     <%= link_to '一覧に戻る', diaries_path, class: 'text-sm text-indigo-600 hover:text-indigo-700 font-medium' %>
   </div>
 
+  <% unless @diary.correction_completed? %>
+    <div class="mb-6 p-4 bg-amber-50 text-amber-800 border border-amber-200 rounded-md" role="alert">
+      AI添削の結果を取得できませんでした。日記は保存されています。時間をおいて再度投稿するか、後から確認してください。
+    </div>
+  <% end %>
+
   <h2 class="text-lg font-bold mb-2">あなたの文章</h2>
-  <p class="text-gray-800 whitespace-pre-wrap"><%= @diary.content %></p>
+  <p class="text-gray-800 whitespace-pre-wrap break-words"><%= @diary.content %></p>
 
   <% if @diary.corrected_text.present? %>
     <h2 class="text-lg font-bold mt-6 mb-2">添削後の文章</h2>
-    <p class="text-gray-800 whitespace-pre-wrap"><%= @diary.corrected_text %></p>
+    <p class="text-gray-800 whitespace-pre-wrap break-words"><%= @diary.corrected_text %></p>
   <% end %>
 
   <% if @diary.feedback.present? %>
     <h2 class="text-lg font-bold mt-6 mb-2">フィードバック</h2>
-    <p class="text-gray-800 whitespace-pre-wrap"><%= @diary.feedback %></p>
+    <p class="text-gray-800 whitespace-pre-wrap break-words"><%= @diary.feedback %></p>
   <% end %>
 
   <% if @diary.suggested_phrases.present? %>
@@ -24,20 +30,23 @@
       <h2 class="text-lg font-bold mb-2">覚えたいフレーズ（最大3つ）</h2>
       <p class="text-sm text-gray-500 mb-4">保存したいフレーズを選んでください。</p>
 
-      <%= form_with url: save_phrases_diary_path(@diary), method: :post, local: true do %>
+      <%= form_with url: save_phrases_diary_path(@diary),
+          method: :post,
+          data: { controller: "loading", action: "submit->loading#start" } do %>
         <ul class="space-y-3 mb-4">
           <% @diary.suggested_phrases.each do |phrase| %>
             <li>
               <label class="flex items-start gap-3 cursor-pointer">
                 <%= check_box_tag 'phrase_contents[]', phrase, true,
                     class: 'mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500' %>
-                <span class="text-gray-800"><%= phrase %></span>
+                <span class="text-gray-800 break-words"><%= phrase %></span>
               </label>
             </li>
           <% end %>
         </ul>
         <%= submit_tag '選択したフレーズを保存',
-            class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-200 cursor-pointer' %>
+            data: { loading_target: 'submit', loading_text: '保存中...' },
+            class: 'w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded transition duration-200 cursor-pointer' %>
       <% end %>
     </section>
   <% end %>

@@ -1,0 +1,10 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+
+  <div
+    role="alert"
+    data-controller="flash"
+    class="mb-4 p-4 rounded-md <%= flash_class(type) %>">
+    <%= message %>
+  </div>
+<% end %>

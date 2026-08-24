@@ -11,66 +11,88 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800" data-controller="diary-modal">
-    <!-- 共通ヘッダー -->
-    <header class="bg-white border-b border-gray-200 fixed top-0 w-full z-10 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide" %>
-        
-        <nav class="flex items-center space-x-4">
-          <% if logged_in? %>
-            <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= link_to "日記", diaries_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= link_to "マイページ", profile_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= button_to "ログアウト", logout_path, method: :delete, class: "text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
-          <% else %>
-            <%= link_to "ログイン", login_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-            <%= link_to "新規登録", new_user_path, class: "text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
-          <% end %>
-        </nav>
-      </div>
-    </header>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800" data-controller="diary-modal mobile-nav">
+  <header class="bg-white border-b border-gray-200 fixed top-0 w-full z-20 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
 
-    <!-- メインコンテンツ領域（ヘッダーの高さを考慮して上部余白を設定） -->
-    <main class="flex-grow max-w-7xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8 py-8">
-      <% if flash[:notice] %>
-        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-md"><%= flash[:notice] %></div>
-      <% end %>
-      <% if flash[:alert] %>
-        <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-md"><%= flash[:alert] %></div>
-      <% end %>
-      <%= yield %>
-    </main>
-
-    <!-- 共通フッター -->
-    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-        &copy; 2026 App. All rights reserved.
-      </div>
-    </footer>
-
-    <dialog data-diary-modal-target="dialog"
-            class="w-[min(100%,42rem)] max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50 open:flex open:flex-col"
-            data-action="click->diary-modal#closeOnBackdrop cancel->diary-modal#close">
-      <div class="flex items-start justify-between gap-4 mb-4">
-        <time class="text-sm text-gray-500" data-diary-modal-target="date"></time>
-        <button type="button"
-                class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-                data-action="diary-modal#close"
-                aria-label="閉じる">
-          &times;
+      <% if logged_in? %>
+        <button
+          type="button"
+          class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          data-action="mobile-nav#toggle"
+          aria-label="メニューを開く"
+          aria-expanded="false">
+          <svg data-mobile-nav-target="openIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg data-mobile-nav-target="closeIcon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
-      </div>
 
-      <p class="text-gray-800 whitespace-pre-wrap flex-1" data-diary-modal-target="content"></p>
+        <nav class="hidden md:flex items-center gap-3 lg:gap-4">
+          <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "日記", diaries_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "マイページ", profile_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= button_to "ログアウト", logout_path, method: :delete, class: "text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
+        </nav>
+      <% else %>
+        <nav class="flex items-center gap-3">
+          <%= link_to "ログイン", login_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
+          <%= link_to "新規登録", new_user_path, class: "text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
+        </nav>
+      <% end %>
+    </div>
 
+    <% if logged_in? %>
+      <nav
+        data-mobile-nav-target="menu"
+        class="hidden md:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1"
+        data-action="click->mobile-nav#close">
+        <%= link_to "復習", reviews_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
+        <%= link_to "カレンダー", review_calendar_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
+        <%= link_to "フレーズ", phrases_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
+        <%= link_to "日記", diaries_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
+        <%= link_to "マイページ", profile_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
+        <%= button_to "ログアウト", logout_path, method: :delete, class: "w-full text-left text-sm text-gray-700 hover:text-gray-900 font-medium py-2" %>
+      </nav>
+    <% end %>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto mt-16 md:mt-20 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <%= render "shared/flash" %>
+    <%= yield %>
+  </main>
+
+  <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+      &copy; 2026 App. All rights reserved.
+    </div>
+  </footer>
+
+  <dialog data-diary-modal-target="dialog"
+          class="w-[min(100%,42rem)] max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50 open:flex open:flex-col"
+          data-action="click->diary-modal#closeOnBackdrop cancel->diary-modal#close">
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <time class="text-sm text-gray-500" data-diary-modal-target="date"></time>
       <button type="button"
-              class="mt-6 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded transition duration-200"
-              data-action="diary-modal#close">
-        閉じる
+              class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+              data-action="diary-modal#close"
+              aria-label="閉じる">
+        &times;
       </button>
-    </dialog>
+    </div>
+
+    <p class="text-gray-800 whitespace-pre-wrap flex-1" data-diary-modal-target="content"></p>
+
+    <button type="button"
+            class="mt-6 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded transition duration-200"
+            data-action="diary-modal#close">
+      閉じる
+    </button>
+  </dialog>
   </body>
 </html>

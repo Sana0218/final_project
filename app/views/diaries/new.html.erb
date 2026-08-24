@@ -1,10 +1,11 @@
-<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+<div class="max-w-3xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
   <h1 class="text-2xl font-bold mb-2">日記を書く</h1>
   <p class="text-sm text-gray-500 mb-6">英語で書ける部分は英語で、わからない部分は日本語で書いてみましょう。</p>
 
-  <%= form_with model: @diary, local: true do |f| %>
+  <%= form_with model: @diary,
+      data: { controller: "loading", action: "submit->loading#start" } do |f| %>
     <% if @diary.errors.any? %>
-      <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+      <div class="mb-4 p-4 bg-red-50 text-red-800 border border-red-200 rounded-md" role="alert">
         <ul class="list-disc pl-5">
           <% @diary.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -18,9 +19,25 @@
       <%= f.text_area :content, rows: 12, placeholder: 'Today I went to the park. 天気がよくて気持ちよかった。', class: 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500' %>
     </div>
 
-    <div class="flex items-center justify-between space-x-4">
-      <%= link_to 'キャンセル', diaries_path, class: 'w-1/2 text-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded transition duration-200' %>
-      <%= f.submit '投稿する', class: 'w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-200 cursor-pointer' %>
+    <div
+      data-loading-target="status"
+      class="hidden mb-4 flex items-center gap-2 text-sm text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-md p-3"
+      role="status">
+      <svg class="animate-spin h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      <span>AIが添削中です。数十秒かかる場合があります。</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+      <%= link_to 'キャンセル', diaries_path, class: 'w-full sm:w-auto text-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded transition duration-200' %>
+      <%= f.submit '投稿する',
+          data: {
+            loading_target: 'submit',
+            loading_text: '添削中...'
+          },
+          class: 'w-full sm:flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded transition duration-200 cursor-pointer' %>
     </div>
   <% end %>
 </div>
