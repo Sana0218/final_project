@@ -17,9 +17,27 @@
     data-controller="mobile-nav"
     data-action="turbo:before-cache@document->mobile-nav#closeMenu keydown.esc@window->mobile-nav#closeMenu">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
+      <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0 #{'lg:hidden' if logged_in?}" %>
 
       <% if logged_in? %>
+        <nav class="hidden lg:flex items-center gap-1" aria-label="メインメニュー">
+          <%= link_to root_path, class: header_icon_class, aria: { label: 'ホーム' }, title: 'ホーム' do %>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .414.336.75.75.75H9.75v-4.875c0-.414.336-.75.75-.75h3c.414 0 .75.336.75.75V20.25h4.5a.75.75 0 0 0 .75-.75V9.75M8.25 21h8.25" />
+            </svg>
+          <% end %>
+          <%= link_to diaries_path, class: header_icon_class, aria: { label: '日記' }, title: '日記' do %>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+            </svg>
+          <% end %>
+          <%= link_to profile_path, class: header_icon_class, aria: { label: 'マイページ' }, title: 'マイページ' do %>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          <% end %>
+        </nav>
+
         <button
           type="button"
           class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
@@ -36,7 +54,7 @@
           </svg>
         </button>
 
-        <nav class="hidden md:flex items-center gap-3 lg:gap-4">
+        <nav class="hidden md:flex lg:hidden items-center gap-3">
           <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
@@ -44,6 +62,12 @@
           <%= link_to "マイページ", profile_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= button_to "ログアウト", logout_path, method: :delete, class: "text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded-lg transition shadow-sm" %>
         </nav>
+
+        <%= button_to logout_path, method: :delete, form_class: "hidden lg:block", class: header_icon_class, aria: { label: "ログアウト" }, title: "ログアウト" do %>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+          </svg>
+        <% end %>
       <% else %>
         <nav class="flex items-center gap-3">
           <%= link_to "ログイン", login_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
@@ -68,7 +92,7 @@
     <% end %>
   </header>
 
-  <main class="flex-grow max-w-7xl w-full mx-auto mt-16 md:mt-20 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <main class="flex-grow max-w-7xl w-full mx-auto mt-16 md:mt-20 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 <%= 'lg:py-4 lg:overflow-hidden' if logged_in? && current_page?(root_path) %>">
     <%= render "shared/flash" %>
     <%= yield %>
   </main>

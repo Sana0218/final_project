@@ -1,0 +1,40 @@
+<% compact = local_assigns.fetch(:compact, false) %>
+<div class="<%= compact ? 'min-h-0 flex flex-col' : '' %>">
+  <div class="grid grid-cols-7 <%= compact ? 'gap-1' : 'gap-2' %> text-center text-xs font-medium text-gray-500 mb-2">
+    <% %w[日 月 火 水 木 金 土].each do |weekday| %>
+      <div><%= weekday %></div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-7 <%= compact ? 'gap-1' : 'gap-2' %>">
+    <% calendar.calendar_days.each do |date| %>
+      <% phrases = calendar.phrases_for(date) %>
+      <% in_month = calendar.current_month?(date) %>
+      <% today = date == Date.current %>
+      <div class="<%= compact ? 'min-h-9 p-1' : 'min-h-24 p-2' %> rounded-lg border text-left <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100' %> <%= today ? 'ring-2 ring-indigo-500' : '' %>">
+        <div class="flex items-center justify-between <%= compact ? '' : 'mb-1' %>">
+          <span class="<%= compact ? 'text-xs' : 'text-sm' %> font-semibold <%= in_month ? 'text-gray-900' : 'text-gray-400' %>">
+            <%= date.day %>
+          </span>
+          <% if phrases.any? && in_month %>
+            <span class="<%= compact ? 'text-[9px] px-1' : 'text-[10px] px-1.5 py-0.5' %> font-medium text-indigo-700 bg-indigo-50 rounded-full">
+              <%= phrases.size %>件
+            </span>
+          <% end %>
+        </div>
+        <% if in_month && !compact %>
+          <ul class="space-y-1">
+            <% phrases.first(2).each do |user_phrase| %>
+              <li class="text-[11px] text-gray-600 truncate" title="<%= user_phrase.phrase.content %>">
+                <%= truncate(user_phrase.phrase.content, length: 18) %>
+              </li>
+            <% end %>
+            <% if phrases.size > 2 %>
+              <li class="text-[10px] text-gray-400">他 <%= phrases.size - 2 %> 件</li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
