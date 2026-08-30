@@ -3,6 +3,14 @@
 class ReviewCalendarBuilder
   WEEK_START = :sunday
 
+  def self.parse_month(value)
+    return Date.current.beginning_of_month if value.blank?
+
+    Date.strptime(value.to_s, '%Y-%m')
+  rescue ArgumentError
+    Date.current.beginning_of_month
+  end
+
   def initialize(user:, month:)
     @user = user
     @month = month.beginning_of_month

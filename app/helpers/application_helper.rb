@@ -10,4 +10,9 @@ module ApplicationHelper
   def flash_class(type)
     FLASH_CLASSES.fetch(type.to_s, 'bg-gray-50 text-gray-800 border border-gray-200')
   end
+
+  def header_icon_class
+    'inline-flex items-center justify-center p-2 rounded-md ' \
+      'text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition'
+  end
 end
