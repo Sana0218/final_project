@@ -11,8 +11,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800" data-controller="diary-modal mobile-nav">
-  <header class="bg-white border-b border-gray-200 fixed top-0 w-full z-20 shadow-sm">
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800" data-controller="diary-modal">
+  <header
+    class="bg-white border-b border-gray-200 fixed top-0 w-full z-20 shadow-sm"
+    data-controller="mobile-nav"
+    data-action="turbo:before-cache@document->mobile-nav#closeMenu keydown.esc@window->mobile-nav#closeMenu">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
 
@@ -20,13 +23,15 @@
         <button
           type="button"
           class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          data-mobile-nav-target="toggleButton"
           data-action="mobile-nav#toggle"
           aria-label="メニューを開く"
-          aria-expanded="false">
+          aria-expanded="false"
+          aria-controls="mobile-nav-menu">
           <svg data-mobile-nav-target="openIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          <svg data-mobile-nav-target="closeIcon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <svg data-mobile-nav-target="closeIcon" hidden class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -49,15 +54,16 @@
 
     <% if logged_in? %>
       <nav
+        id="mobile-nav-menu"
+        hidden
         data-mobile-nav-target="menu"
-        class="hidden md:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1"
-        data-action="click->mobile-nav#close">
-        <%= link_to "復習", reviews_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
-        <%= link_to "カレンダー", review_calendar_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
-        <%= link_to "フレーズ", phrases_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
-        <%= link_to "日記", diaries_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
-        <%= link_to "マイページ", profile_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium" %>
-        <%= button_to "ログアウト", logout_path, method: :delete, class: "w-full text-left text-sm text-gray-700 hover:text-gray-900 font-medium py-2" %>
+        class="md:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
+        <%= link_to "復習", reviews_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
+        <%= link_to "カレンダー", review_calendar_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
+        <%= link_to "フレーズ", phrases_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
+        <%= link_to "日記", diaries_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
+        <%= link_to "マイページ", profile_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
+        <%= button_to "ログアウト", logout_path, method: :delete, class: "w-full text-left text-sm text-gray-700 hover:text-gray-900 font-medium py-2", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
       </nav>
     <% end %>
   </header>
