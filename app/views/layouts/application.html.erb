@@ -92,7 +92,7 @@
     <% end %>
   </header>
 
-  <main class="flex-grow max-w-7xl w-full mx-auto mt-16 md:mt-20 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 <%= 'lg:py-4 lg:overflow-hidden' if logged_in? && current_page?(root_path) %>">
+  <main class="flex-grow max-w-7xl w-full mx-auto mt-16 md:mt-20 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 <%= 'lg:py-4' if logged_in? && current_page?(root_path) %>">
     <%= render "shared/flash" %>
     <%= yield %>
   </main>

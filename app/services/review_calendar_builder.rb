@@ -36,9 +36,27 @@ class ReviewCalendarBuilder
     date.month == @month.month
   end
 
+  def diary_written_on?(date)
+    diary_dates.include?(date)
+  end
+
   private
 
   def user_phrases
     @user.user_phrases.with_phrase.scheduled_in(@month.all_month)
+  end
+
+  def diary_dates
+    @diary_dates ||= begin
+      zone = user_time_zone
+      range = calendar_days.first.in_time_zone(zone).beginning_of_day..calendar_days.last.in_time_zone(zone).end_of_day
+      @user.diaries.where(created_at: range).pluck(:created_at).map do |time|
+        time.in_time_zone(zone).to_date
+      end.to_set
+    end
+  end
+
+  def user_time_zone
+    ActiveSupport::TimeZone[@user.time_zone] || Time.zone
   end
 end

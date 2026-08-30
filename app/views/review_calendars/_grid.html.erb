@@ -1,4 +1,5 @@
 <% compact = local_assigns.fetch(:compact, false) %>
+<% day_slot = compact ? 'h-7 w-7 text-[11px]' : 'h-8 w-8 text-sm' %>
 <div class="<%= compact ? 'min-h-0 flex flex-col' : '' %>">
   <div class="grid grid-cols-7 <%= compact ? 'gap-1' : 'gap-2' %> text-center text-xs font-medium text-gray-500 mb-2">
     <% %w[日 月 火 水 木 金 土].each do |weekday| %>
@@ -6,33 +7,54 @@
     <% end %>
   </div>
 
-  <div class="grid grid-cols-7 <%= compact ? 'gap-1' : 'gap-2' %>">
+  <div class="grid grid-cols-7 items-start <%= compact ? 'gap-1' : 'gap-2' %>">
     <% calendar.calendar_days.each do |date| %>
       <% phrases = calendar.phrases_for(date) %>
       <% in_month = calendar.current_month?(date) %>
       <% today = date == Date.current %>
-      <div class="<%= compact ? 'min-h-9 p-1' : 'min-h-24 p-2' %> rounded-lg border text-left <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100' %> <%= today ? 'ring-2 ring-indigo-500' : '' %>">
-        <div class="flex items-center justify-between <%= compact ? '' : 'mb-1' %>">
-          <span class="<%= compact ? 'text-xs' : 'text-sm' %> font-semibold <%= in_month ? 'text-gray-900' : 'text-gray-400' %>">
-            <%= date.day %>
-          </span>
-          <% if phrases.any? && in_month %>
-            <span class="<%= compact ? 'text-[9px] px-1' : 'text-[10px] px-1.5 py-0.5' %> font-medium text-indigo-700 bg-indigo-50 rounded-full">
-              <%= phrases.size %>件
-            </span>
+      <% wrote_diary = in_month && calendar.diary_written_on?(date) %>
+      <% review_count = in_month ? phrases.size : 0 %>
+      <div class="group relative min-w-0 w-full self-start overflow-visible rounded-lg border text-left aspect-square <%= compact ? 'p-1' : 'p-2' %> <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100' %> <%= today ? 'ring-2 ring-indigo-500' : '' %>"
+           <% if review_count.positive? %>
+             title="復習<%= review_count %>件"
+           <% end %>>
+        <div class="<%= compact ? 'flex h-full items-center justify-center' : 'flex h-full min-h-0 flex-col overflow-hidden' %>">
+          <div class="relative inline-flex <%= day_slot %> shrink-0 items-center justify-center <%= compact ? '' : 'mb-1' %>">
+            <% if wrote_diary %>
+              <%= render 'review_calendars/hanamaru', day: date.day, compact: compact %>
+            <% elsif review_count.positive? %>
+              <span class="inline-flex h-full w-full items-center justify-center rounded-full border-2 border-blue-500 font-semibold <%= in_month ? 'text-gray-900' : 'text-gray-400' %>"
+                    aria-label="復習<%= review_count %>件">
+                <%= date.day %>
+              </span>
+            <% else %>
+              <span class="font-semibold <%= in_month ? 'text-gray-900' : 'text-gray-400' %>">
+                <%= date.day %>
+              </span>
+            <% end %>
+            <% if wrote_diary && review_count.positive? %>
+              <span class="absolute -bottom-0.5 left-1/2 <%= compact ? 'h-1.5 w-1.5' : 'h-2 w-2' %> -translate-x-1/2 rounded-full bg-blue-500" aria-label="復習<%= review_count %>件"></span>
+            <% end %>
+          </div>
+
+          <% if in_month && !compact %>
+            <ul class="min-h-0 flex-1 space-y-1 overflow-hidden">
+              <% phrases.first(2).each do |user_phrase| %>
+                <li class="text-[11px] text-gray-600 truncate" title="<%= user_phrase.phrase.content %>">
+                  <%= truncate(user_phrase.phrase.content, length: 18) %>
+                </li>
+              <% end %>
+              <% if phrases.size > 2 %>
+                <li class="text-[10px] text-gray-400">他 <%= phrases.size - 2 %> 件</li>
+              <% end %>
+            </ul>
           <% end %>
         </div>
-        <% if in_month && !compact %>
-          <ul class="space-y-1">
-            <% phrases.first(2).each do |user_phrase| %>
-              <li class="text-[11px] text-gray-600 truncate" title="<%= user_phrase.phrase.content %>">
-                <%= truncate(user_phrase.phrase.content, length: 18) %>
-              </li>
-            <% end %>
-            <% if phrases.size > 2 %>
-              <li class="text-[10px] text-gray-400">他 <%= phrases.size - 2 %> 件</li>
-            <% end %>
-          </ul>
+
+        <% if review_count.positive? %>
+          <span class="pointer-events-none absolute left-1/2 z-30 mt-1 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-[10px] text-white opacity-0 shadow-sm group-hover:opacity-100">
+            復習<%= review_count %>件
+          </span>
         <% end %>
       </div>
     <% end %>

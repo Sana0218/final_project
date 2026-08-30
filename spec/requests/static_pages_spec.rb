@@ -30,6 +30,8 @@ RSpec.describe 'StaticPages', type: :request do
 
       expect(response.body).to include('Dashboard diary preview')
       expect(response.body).to include('dashboard phrase')
+      expect(response.body).to include('復習1件')
+      expect(response.body).to include('日記を書いた日')
     end
 
     it 'limits diary previews to the most recent entries' do
