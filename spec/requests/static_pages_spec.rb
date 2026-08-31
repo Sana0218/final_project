@@ -60,10 +60,10 @@ RSpec.describe 'StaticPages', type: :request do
       expect(response.body).to include('aria-label="ログアウト"')
     end
 
-    it 'does not show the App brand or welcome copy when logged in' do
+    it 'does not show the 英語ダイアリー brand or welcome copy when logged in' do
       get root_path
 
-      expect(response.body).not_to include('>App</a>')
+      expect(response.body).not_to include('>英語ダイアリー</a>')
       expect(response.body).not_to include('Weclcome')
       expect(response.body).not_to include('トップページへようこそ')
     end
