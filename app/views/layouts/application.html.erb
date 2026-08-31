@@ -57,8 +57,8 @@
         </button>
 
         <nav class="hidden md:flex lg:hidden items-center gap-3 ml-auto">
+          <%= link_to "ホーム", root_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
-          <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "日記", diaries_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "マイページ", profile_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
@@ -84,8 +84,8 @@
         hidden
         data-mobile-nav-target="menu"
         class="md:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
+        <%= link_to "ホーム", root_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
         <%= link_to "復習", reviews_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
-        <%= link_to "カレンダー", review_calendar_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
         <%= link_to "フレーズ", phrases_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
         <%= link_to "日記", diaries_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
         <%= link_to "マイページ", profile_path, class: "block py-2 text-sm text-gray-700 hover:text-gray-900 font-medium", data: { action: "click->mobile-nav#closeMenuFromItem" } %>
