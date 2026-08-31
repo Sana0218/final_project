@@ -1,4 +1,4 @@
-<div class="h-full min-h-0 grid grid-cols-3 gap-6">
+<div class="h-full min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-6">
   <section class="min-h-0 flex flex-col gap-4">
     <%= link_to new_diary_path,
         class: 'shrink-0 flex items-center justify-center gap-2 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-3 px-4 rounded-lg transition shadow-sm' do %>
@@ -8,7 +8,7 @@
       日記を書く
     <% end %>
 
-    <div class="flex-1 min-h-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex flex-col overflow-visible">
+    <div class="lg:flex-1 min-h-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex flex-col overflow-visible">
       <div class="flex items-center justify-between gap-2 mb-3 shrink-0">
         <%= link_to review_calendar_path, class: 'text-sm font-bold text-gray-900 hover:text-indigo-600' do %>
           <%= @calendar.month.year %>年<%= @calendar.month.month %>月
@@ -25,18 +25,18 @@
               class: 'text-xs px-2 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50' %>
         </div>
       </div>
-      <div class="min-h-0">
+      <div class="min-h-0 max-h-96 overflow-auto lg:max-h-none lg:overflow-visible">
         <%= render 'review_calendars/grid', calendar: @calendar, compact: true %>
       </div>
     </div>
   </section>
 
-  <section class="min-h-0 flex flex-col bg-red-50 rounded-lg p-4 overflow-hidden">
+  <section class="min-h-0 flex flex-col bg-red-50 rounded-lg p-4 lg:overflow-hidden">
     <div class="flex items-center justify-between gap-2 mb-3 shrink-0">
       <h2 class="text-sm font-bold text-gray-900">作成した日記</h2>
       <%= link_to '一覧へ', diaries_path, class: 'text-xs text-indigo-600 hover:text-indigo-700 font-medium' %>
     </div>
-    <div class="flex-1 min-h-0 overflow-hidden space-y-2">
+    <div class="space-y-2 lg:flex-1 lg:min-h-0 lg:overflow-hidden">
       <% if @recent_diaries.any? %>
         <%= render partial: 'diaries/diary_card', collection: @recent_diaries, as: :diary, locals: { compact: true } %>
       <% else %>
@@ -45,12 +45,12 @@
     </div>
   </section>
 
-  <section class="min-h-0 flex flex-col bg-red-50 rounded-lg p-4 overflow-hidden">
+  <section class="min-h-0 flex flex-col bg-red-50 rounded-lg p-4 lg:overflow-hidden">
     <div class="flex items-center justify-between gap-2 mb-3 shrink-0">
       <h2 class="text-sm font-bold text-gray-900">保存したフレーズ</h2>
       <%= link_to '一覧へ', phrases_path, class: 'text-xs text-indigo-600 hover:text-indigo-700 font-medium' %>
     </div>
-    <div class="flex-1 min-h-0 overflow-hidden space-y-2">
+    <div class="space-y-2 lg:flex-1 lg:min-h-0 lg:overflow-hidden">
       <% if @recent_user_phrases.any? %>
         <ul class="space-y-2">
           <% @recent_user_phrases.each do |user_phrase| %>
