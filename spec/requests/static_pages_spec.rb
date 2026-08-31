@@ -67,5 +67,12 @@ RSpec.describe 'StaticPages', type: :request do
       expect(response.body).not_to include('Weclcome')
       expect(response.body).not_to include('トップページへようこそ')
     end
+
+    it 'includes a Home item and omits Calendar from compact navigation' do
+      get root_path
+
+      expect(response.body).to include('>ホーム</a>')
+      expect(response.body).not_to include('>カレンダー</a>')
+    end
   end
 end
