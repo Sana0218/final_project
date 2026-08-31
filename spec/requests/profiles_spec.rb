@@ -26,27 +26,6 @@ RSpec.describe 'Profiles', type: :request do
       expect(user.reload.name).to eq('Updated Name')
     end
 
-    it 'updates reminder settings' do
-      patch profile_path, params: {
-        user: {
-          name: user.name,
-          email: user.email,
-          reminder_enabled: '1',
-          reminder_hour: '20',
-          reminder_minute: '30',
-          time_zone: 'Asia/Tokyo'
-        }
-      }
-
-      expect(response).to redirect_to(profile_path)
-      expect(user.reload).to have_attributes(
-        reminder_enabled: true,
-        reminder_hour: 20,
-        reminder_minute: 30,
-        time_zone: 'Asia/Tokyo'
-      )
-    end
-
     it 'renders edit when update fails' do
       patch profile_path, params: { user: { name: user.name, email: 'invalid-email' } }
 
@@ -79,16 +58,6 @@ RSpec.describe 'Profiles', type: :request do
 
       expect(response).to redirect_to(profile_path)
       expect(user.reload).to be_valid_password('newpassword')
-    end
-  end
-
-  describe 'POST /profile/line_link_token' do
-    it 'generates a LINE link token' do
-      post line_link_token_profile_path
-
-      expect(response).to redirect_to(profile_path)
-      expect(user.reload.line_link_token).to be_present
-      expect(user.line_link_token_expires_at).to be_present
     end
   end
 end

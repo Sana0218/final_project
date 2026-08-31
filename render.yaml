@@ -11,27 +11,5 @@ services:
         sync: false
       - key: WEB_CONCURRENCY
         value: "2"
-      - key: LINE_CHANNEL_SECRET
-        sync: false
-      - key: LINE_CHANNEL_ACCESS_TOKEN
-        sync: false
-      - key: APP_HOST
-        sync: false
-
-  - type: cron
-    name: line-reminders
-    schedule: "*/5 * * * *"
-    env: ruby
-    buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec rake reminders:send_line_reminders"
-    envVars:
-      - key: DATABASE_URL
-        sync: false
-      - key: RAILS_MASTER_KEY
-        sync: false
-      - key: LINE_CHANNEL_SECRET
-        sync: false
-      - key: LINE_CHANNEL_ACCESS_TOKEN
-        sync: false
       - key: APP_HOST
         sync: false
