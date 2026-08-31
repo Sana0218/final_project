@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+
+dialog.diary-modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(calc(100% - 2rem), 42rem);
+  height: fit-content;
+  max-height: 90vh;
+}

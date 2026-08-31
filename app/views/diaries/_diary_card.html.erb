@@ -5,7 +5,9 @@
         action: 'diary-modal#open',
         diary_modal_payload_value: {
           date: l(diary.created_at, format: :long),
-          content: diary.content
+          content: diary.content,
+          corrected_text: diary.corrected_text,
+          feedback: diary.feedback
         }.to_json
       }
     ) do %>

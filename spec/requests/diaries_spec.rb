@@ -13,5 +13,21 @@ RSpec.describe 'Diaries', type: :request do
       expect(response.body).to include(diary.content)
       expect(response.body).to include('詳細を見る')
     end
+
+    it 'includes correction feedback in the diary detail payload' do
+      user.diaries.create!(
+        content: 'I go to park yesterday.',
+        corrected_text: 'I went to the park yesterday.',
+        feedback: 'go を went に直しました。'
+      )
+
+      get diaries_path
+
+      expect(response.body).to include('I go to park yesterday.')
+      expect(response.body).to include('I went to the park yesterday.')
+      expect(response.body).to include('go を went に直しました。')
+      expect(response.body).to include('あなたの文章')
+      expect(response.body).to include('フィードバック')
+    end
   end
 end
