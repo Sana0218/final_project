@@ -104,7 +104,7 @@
   </footer>
 
   <dialog data-diary-modal-target="dialog"
-          class="w-[min(100%,42rem)] max-h-[90vh] overflow-y-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50 open:flex open:flex-col"
+          class="diary-modal overflow-y-auto rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/50"
           data-action="click->diary-modal#closeOnBackdrop cancel->diary-modal#close">
     <div class="flex items-start justify-between gap-4 mb-4">
       <time class="text-sm text-gray-500" data-diary-modal-target="date"></time>
@@ -116,7 +116,22 @@
       </button>
     </div>
 
-    <p class="text-gray-800 whitespace-pre-wrap flex-1" data-diary-modal-target="content"></p>
+    <div class="space-y-6">
+      <section>
+        <h2 class="text-lg font-bold mb-2">あなたの文章</h2>
+        <p class="text-gray-800 whitespace-pre-wrap break-words" data-diary-modal-target="content"></p>
+      </section>
+
+      <section data-diary-modal-target="correctedSection" hidden>
+        <h2 class="text-lg font-bold mb-2">添削後の文章</h2>
+        <p class="text-gray-800 whitespace-pre-wrap break-words" data-diary-modal-target="correctedText"></p>
+      </section>
+
+      <section data-diary-modal-target="feedbackSection" hidden>
+        <h2 class="text-lg font-bold mb-2">フィードバック</h2>
+        <p class="text-gray-800 whitespace-pre-wrap break-words" data-diary-modal-target="feedback"></p>
+      </section>
+    </div>
 
     <button type="button"
             class="mt-6 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded transition duration-200"
