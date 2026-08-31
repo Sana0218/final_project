@@ -17,7 +17,9 @@
     data-controller="mobile-nav"
     data-action="turbo:before-cache@document->mobile-nav#closeMenu keydown.esc@window->mobile-nav#closeMenu">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0 #{'lg:hidden' if logged_in?}" %>
+      <% unless logged_in? %>
+        <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
+      <% end %>
 
       <% if logged_in? %>
         <nav class="hidden lg:flex items-center gap-1" aria-label="メインメニュー">
@@ -40,7 +42,7 @@
 
         <button
           type="button"
-          class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          class="md:hidden ml-auto inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
           data-mobile-nav-target="toggleButton"
           data-action="mobile-nav#toggle"
           aria-label="メニューを開く"
@@ -54,7 +56,7 @@
           </svg>
         </button>
 
-        <nav class="hidden md:flex lg:hidden items-center gap-3">
+        <nav class="hidden md:flex lg:hidden items-center gap-3 ml-auto">
           <%= link_to "復習", reviews_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "カレンダー", review_calendar_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
           <%= link_to "フレーズ", phrases_path, class: "text-sm text-gray-600 hover:text-gray-900 transition font-medium" %>
