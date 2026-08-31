@@ -13,9 +13,21 @@ class GeminiCorrectionService
     Return JSON with keys corrected_text (English), feedback (Japanese),
     and suggested_phrases (array of exactly 3 useful English phrases to learn).
   PROMPT
+  REVIEW_SYSTEM_PROMPT = <<~PROMPT.chomp
+    You are a helpful English tutor. The learner is practicing target English
+    phrases by writing an original sentence or short paragraph.
+    Task:
+    1. Correct the writing into natural English. Keep target phrases when they
+    are used correctly.
+    2. Give feedback in Japanese about grammar and whether the phrases were
+    used naturally. Mention any unused target phrases briefly.
+    Return JSON with keys corrected_text (English), feedback (Japanese),
+    and suggested_phrases (array of exactly 3 useful English phrases to learn).
+  PROMPT
 
-  def initialize(diary)
+  def initialize(diary, practice_phrases: [])
     @diary = diary
+    @practice_phrases = Array(practice_phrases).compact_blank
   end
 
   def call
@@ -53,9 +65,26 @@ class GeminiCorrectionService
       response_format: { type: 'json_object' },
       model: MODEL,
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: @diary.content }
+        { role: 'system', content: system_prompt },
+        { role: 'user', content: user_content }
       ]
     }
+  end
+
+  def system_prompt
+    @practice_phrases.any? ? REVIEW_SYSTEM_PROMPT : SYSTEM_PROMPT
+  end
+
+  def user_content
+    return @diary.content if @practice_phrases.empty?
+
+    phrase_lines = @practice_phrases.map { |phrase| "- #{phrase}" }.join("\n")
+    <<~TEXT.chomp
+      Target phrases to practice:
+      #{phrase_lines}
+
+      Learner's writing:
+      #{@diary.content}
+    TEXT
   end
 end

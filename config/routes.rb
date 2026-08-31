@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   post 'line/webhook', to: 'line_webhooks#create'
 
   # reviews
-  resources :reviews, only: [:index] do
+  resources :reviews, only: %i[index create] do
     member do
       post :complete
     end
