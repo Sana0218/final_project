@@ -27,6 +27,34 @@ RSpec.describe ReviewCalendarBuilder do
     end
   end
 
+  describe '#diary_written_on?' do
+    it 'is true on the local date the user wrote a diary' do
+      user.diaries.create!(
+        content: 'Wrote in the evening',
+        created_at: Time.find_zone('Asia/Tokyo').local(2026, 8, 15, 1, 30, 0)
+      )
+
+      calendar = described_class.new(user: user, month: month)
+
+      expect(calendar.diary_written_on?(Date.new(2026, 8, 15))).to be true
+      expect(calendar.diary_written_on?(Date.new(2026, 8, 14))).to be false
+    end
+
+    it 'does not mark another user\'s diary days' do
+      other = User.create!(
+        name: 'Other',
+        email: 'other-diary-cal@example.com',
+        password: 'password',
+        password_confirmation: 'password'
+      )
+      other.diaries.create!(content: 'secret', created_at: Time.utc(2026, 8, 15, 3, 0, 0))
+
+      calendar = described_class.new(user: user, month: month)
+
+      expect(calendar.diary_written_on?(Date.new(2026, 8, 15))).to be false
+    end
+  end
+
   describe '#phrases_for' do
     it 'returns phrases scheduled on the given date' do
       phrase = Phrase.create!(content: 'go to a shrine')

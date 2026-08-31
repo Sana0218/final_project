@@ -25,30 +25,39 @@
       </div>
     </div>
 
-    <% scheduled_days = @calendar.calendar_days.select { |date| @calendar.current_month?(date) && @calendar.phrases_for(date).any? } %>
+    <% scheduled_days = @calendar.calendar_days.select { |date| @calendar.current_month?(date) && (@calendar.phrases_for(date).any? || @calendar.diary_written_on?(date)) } %>
 
     <div class="md:hidden space-y-4">
       <% if scheduled_days.any? %>
         <% scheduled_days.each do |date| %>
           <% phrases = @calendar.phrases_for(date) %>
           <div class="border border-gray-200 rounded-lg p-4 <%= date == Date.current ? 'ring-2 ring-indigo-500' : '' %>">
-            <div class="flex items-center justify-between mb-2">
-              <p class="text-sm font-semibold text-gray-900">
-                <%= l(date, format: :long) %>
-              </p>
-              <span class="text-xs font-medium text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
-                <%= phrases.size %>件
-              </span>
-            </div>
-            <ul class="space-y-1">
-              <% phrases.each do |user_phrase| %>
-                <li class="text-sm text-gray-600 break-words"><%= user_phrase.phrase.content %></li>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <% if @calendar.diary_written_on?(date) %>
+                  <%= render 'review_calendars/hanamaru', day: date.day, compact: true %>
+                <% end %>
+                <p class="text-sm font-semibold text-gray-900">
+                  <%= l(date, format: :long) %>
+                </p>
+              </div>
+              <% if phrases.any? %>
+                <span class="text-xs font-medium text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                  復習<%= phrases.size %>件
+                </span>
               <% end %>
-            </ul>
+            </div>
+            <% if phrases.any? %>
+              <ul class="space-y-1">
+                <% phrases.each do |user_phrase| %>
+                  <li class="text-sm text-gray-600 break-words"><%= user_phrase.phrase.content %></li>
+                <% end %>
+              </ul>
+            <% end %>
           </div>
         <% end %>
       <% else %>
-        <p class="text-sm text-gray-500 text-center py-6">この月に予定されている復習はありません。</p>
+        <p class="text-sm text-gray-500 text-center py-6">この月に日記と復習の記録はありません。</p>
       <% end %>
     </div>
 

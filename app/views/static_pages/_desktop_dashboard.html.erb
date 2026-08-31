@@ -8,7 +8,7 @@
       日記を書く
     <% end %>
 
-    <div class="flex-1 min-h-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex flex-col overflow-hidden">
+    <div class="flex-1 min-h-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex flex-col overflow-visible">
       <div class="flex items-center justify-between gap-2 mb-3 shrink-0">
         <%= link_to review_calendar_path, class: 'text-sm font-bold text-gray-900 hover:text-indigo-600' do %>
           <%= @calendar.month.year %>年<%= @calendar.month.month %>月
@@ -25,7 +25,7 @@
               class: 'text-xs px-2 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50' %>
         </div>
       </div>
-      <div class="flex-1 min-h-0 overflow-hidden">
+      <div class="min-h-0">
         <%= render 'review_calendars/grid', calendar: @calendar, compact: true %>
       </div>
     </div>
