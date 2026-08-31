@@ -40,4 +40,75 @@
           class: 'inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded transition duration-200' %>
     </div>
   <% end %>
+
+  <% if @due_phrases.any? %>
+    <section class="mt-8 pt-8 border-t border-gray-200">
+      <h2 class="text-lg font-bold text-gray-900 mb-2">フレーズを使って書いてみる</h2>
+      <p class="text-sm text-gray-500 mb-4">今日の復習フレーズを使って、自分の文章を書いてみましょう。AIが添削とフィードバックを返します。</p>
+
+      <ul class="flex flex-wrap gap-2 mb-4">
+        <% @due_phrases.each do |user_phrase| %>
+          <li class="text-sm bg-indigo-50 text-indigo-800 px-2.5 py-1 rounded-full"><%= user_phrase.phrase.content %></li>
+        <% end %>
+      </ul>
+
+      <%= form_with url: reviews_path, method: :post, scope: :review_writing,
+          data: { controller: 'loading', action: 'submit->loading#start' } do |f| %>
+        <% if @writing.errors.any? %>
+          <div class="mb-4 p-4 bg-red-50 text-red-800 border border-red-200 rounded-md" role="alert">
+            <ul class="list-disc pl-5">
+              <% @writing.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-4">
+          <%= f.label :content, 'あなたの文章', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+          <%= f.text_area :content, rows: 6,
+              value: @writing.content,
+              placeholder: '例: Yesterday I went to a shrine with my family.',
+              class: 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500' %>
+        </div>
+
+        <div
+          data-loading-target="status"
+          class="hidden mb-4 flex items-center gap-2 text-sm text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-md p-3"
+          role="status">
+          <svg class="animate-spin h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+          <span>AIが添削中です。数十秒かかる場合があります。</span>
+        </div>
+
+        <%= f.submit 'AIに添削してもらう',
+            data: { loading_target: 'submit', loading_text: '添削中...' },
+            class: 'w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded transition duration-200 cursor-pointer' %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <% if @result %>
+    <section class="mt-8 pt-8 border-t border-gray-200">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">添削結果</h2>
+
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">あなたの文章</h3>
+      <p class="text-gray-800 whitespace-pre-wrap break-words mb-6"><%= @result.content %></p>
+
+      <% if @result.corrected_text.present? %>
+        <h3 class="text-sm font-semibold text-gray-700 mb-2">添削後の文章</h3>
+        <p class="text-gray-800 whitespace-pre-wrap break-words mb-6"><%= @result.corrected_text %></p>
+      <% end %>
+
+      <% if @result.feedback.present? %>
+        <h3 class="text-sm font-semibold text-gray-700 mb-2">フィードバック</h3>
+        <p class="text-gray-800 whitespace-pre-wrap break-words mb-6"><%= @result.feedback %></p>
+      <% end %>
+
+      <%= link_to '日記として詳細を見る', diary_path(@result),
+          class: 'text-sm text-indigo-600 hover:text-indigo-700 font-medium' %>
+    </section>
+  <% end %>
 </div>

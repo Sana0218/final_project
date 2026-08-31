@@ -12,6 +12,8 @@ RSpec.describe 'StaticPages', type: :request do
 
         expect(response).to have_http_status(:success)
         expect(response.body).to include('日記を書く')
+        expect(response.body).to include('本日の復習')
+        expect(response.body).to include(reviews_path)
         expect(response.body).to include('2026年8月')
         expect(response.body).to include('作成した日記')
         expect(response.body).to include('保存したフレーズ')
