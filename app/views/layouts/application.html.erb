@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>App</title>
+    <title>英語ダイアリー</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -18,7 +18,7 @@
     data-action="turbo:before-cache@document->mobile-nav#closeMenu keydown.esc@window->mobile-nav#closeMenu">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <% unless logged_in? %>
-        <%= link_to "App", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
+        <%= link_to "英語ダイアリー", root_path, class: "text-xl font-bold text-gray-900 tracking-wide shrink-0" %>
       <% end %>
 
       <% if logged_in? %>
@@ -101,7 +101,7 @@
 
   <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-      &copy; 2026 App. All rights reserved.
+      &copy; 2026 英語ダイアリー. All rights reserved.
     </div>
   </footer>
 
