@@ -12,8 +12,8 @@
       <% phrases = calendar.phrases_for(date) %>
       <% in_month = calendar.current_month?(date) %>
       <% today = date == Date.current %>
-      <% wrote_diary = in_month && calendar.diary_written_on?(date) %>
-      <% review_count = in_month ? phrases.size : 0 %>
+      <% wrote_diary = calendar.diary_written_on?(date) %>
+      <% review_count = phrases.size %>
       <div class="group relative min-w-0 w-full self-start overflow-visible rounded-lg border text-left <%= compact ? 'aspect-square max-h-10 p-0.5' : 'aspect-square p-2' %> <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100' %> <%= today ? 'ring-2 ring-indigo-500' : '' %>"
            <% if review_count.positive? %>
              title="復習<%= review_count %>件"

@@ -10,9 +10,9 @@ RSpec.describe ReviewCalendarBuilder do
 
   describe '.parse_month' do
     it 'returns the beginning of the current month when the value is blank' do
-      travel_to Date.new(2026, 8, 10) do
-        expect(described_class.parse_month(nil)).to eq(Date.new(2026, 8, 1))
-        expect(described_class.parse_month('')).to eq(Date.new(2026, 8, 1))
+      travel_to Time.utc(2026, 8, 31, 21, 0, 0) do
+        expect(described_class.parse_month(nil)).to eq(Date.new(2026, 9, 1))
+        expect(described_class.parse_month('')).to eq(Date.new(2026, 9, 1))
       end
     end
 
@@ -21,7 +21,7 @@ RSpec.describe ReviewCalendarBuilder do
     end
 
     it 'falls back to the current month when the value is invalid' do
-      travel_to Date.new(2026, 8, 10) do
+      travel_to Time.utc(2026, 8, 10, 3, 0, 0) do
         expect(described_class.parse_month('invalid-month')).to eq(Date.new(2026, 8, 1))
       end
     end
@@ -38,6 +38,19 @@ RSpec.describe ReviewCalendarBuilder do
 
       expect(calendar.diary_written_on?(Date.new(2026, 8, 15))).to be true
       expect(calendar.diary_written_on?(Date.new(2026, 8, 14))).to be false
+    end
+
+    it 'places a late-UTC diary on the following Tokyo date' do
+      user.diaries.create!(
+        content: 'Wrote after midnight in Japan',
+        created_at: Time.utc(2026, 8, 31, 21, 33, 0)
+      )
+
+      august = described_class.new(user: user, month: Date.new(2026, 8, 1))
+      september = described_class.new(user: user, month: Date.new(2026, 9, 1))
+
+      expect(august.diary_written_on?(Date.new(2026, 8, 31))).to be false
+      expect(september.diary_written_on?(Date.new(2026, 9, 1))).to be true
     end
 
     it 'does not mark another user\'s diary days' do
