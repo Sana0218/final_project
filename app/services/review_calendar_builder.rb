@@ -50,9 +50,9 @@ class ReviewCalendarBuilder
     @diary_dates ||= begin
       zone = user_time_zone
       range = calendar_days.first.in_time_zone(zone).beginning_of_day..calendar_days.last.in_time_zone(zone).end_of_day
-      @user.diaries.where(created_at: range).pluck(:created_at).map do |time|
+      @user.diaries.where(created_at: range).pluck(:created_at).to_set do |time|
         time.in_time_zone(zone).to_date
-      end.to_set
+      end
     end
   end
 
