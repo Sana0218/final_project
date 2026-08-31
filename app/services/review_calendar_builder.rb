@@ -48,15 +48,11 @@ class ReviewCalendarBuilder
 
   def diary_dates
     @diary_dates ||= begin
-      zone = user_time_zone
+      zone = Time.zone
       range = calendar_days.first.in_time_zone(zone).beginning_of_day..calendar_days.last.in_time_zone(zone).end_of_day
       @user.diaries.where(created_at: range).pluck(:created_at).to_set do |time|
         time.in_time_zone(zone).to_date
       end
     end
-  end
-
-  def user_time_zone
-    ActiveSupport::TimeZone[@user.time_zone] || Time.zone
   end
 end

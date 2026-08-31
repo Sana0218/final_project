@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_08_24_120000) do
+ActiveRecord::Schema[7.1].define(version: 2026_08_31_220000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,17 +51,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_24_120000) do
     t.string "salt"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "line_user_id"
-    t.string "line_link_token"
-    t.datetime "line_link_token_expires_at"
-    t.boolean "reminder_enabled", default: false, null: false
-    t.integer "reminder_hour", default: 21, null: false
-    t.integer "reminder_minute", default: 0, null: false
-    t.string "time_zone", default: "Asia/Tokyo", null: false
-    t.datetime "last_reminder_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["line_link_token"], name: "index_users_on_line_link_token", unique: true, where: "(line_link_token IS NOT NULL)"
-    t.index ["line_user_id"], name: "index_users_on_line_user_id", unique: true, where: "(line_user_id IS NOT NULL)"
   end
 
   add_foreign_key "diaries", "users"
