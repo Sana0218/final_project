@@ -1,0 +1,22 @@
+# Render の無料 Web サービスは約15分アクセスがないとスリープする。
+# 5分ごとに /up を叩いて起動状態を維持する。
+name: Keep Render awake
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: read
+    steps:
+      - name: Ping health check
+        env:
+          KEEP_ALIVE_URL: ${{ vars.KEEP_ALIVE_URL }}
+        run: |
+          url="${KEEP_ALIVE_URL:-https://final-project-d423.onrender.com/up}"
+          curl -fsS --retry 5 --retry-all-errors --retry-delay 10 --max-time 90 "$url"
