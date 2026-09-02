@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Lightweight health check for Render keep-alive / uptime monitors (no login).
+  get 'up' => 'rails/health#show', as: :rails_health_check
+
   root 'static_pages#top'
 
   # User registration
