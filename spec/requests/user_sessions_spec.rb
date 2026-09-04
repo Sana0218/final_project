@@ -40,7 +40,11 @@ RSpec.describe 'UserSessions', type: :request do
       post login_path, params: { email: user.email, password: 'password' }
       delete logout_path
 
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(login_path)
+      follow_redirect!
+      expect(response.body).to include('ログアウトしました')
+      expect(response.body).not_to include('ログインが必要です')
+
       get profile_path
       expect(response).to redirect_to(login_path)
     end
